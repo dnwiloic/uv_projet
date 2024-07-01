@@ -1,0 +1,3 @@
+openweatherapi="5076f696240da39021b179d48eda5e96"
+agromonitoringapi="16f6c39d221b12a4fe1f1afda213799e"
+weatherapi="37dcee93199946bea68205409242905"
