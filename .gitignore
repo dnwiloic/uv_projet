@@ -1,3 +1,39 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
+
 # General Ignored Files
 *.class
 *.log
@@ -17,57 +53,7 @@ migrate_working_dir/
 .idea/
 .vscode/
 
-# Flutter/Dart/Pub Related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-
-# Symbolication and Obfuscation Related
-app.*.symbols
-app.*.map.json
-
-# Android Studio Build Artifacts
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# Flutter and Xcode Related (iOS)
-**/dgph
-*.mode1v3
-*.mode2v3
-*.moved-aside
-*.pbxuser
-*.perspectivev3
-**/*sync/
-.sconsign.dblite
-.tags*
-**/.vagrant/
-**/DerivedData/
-Icon?
-**/Pods/
-**/.symlinks/
-profile
-xcuserdata
-**/.generated/
-Flutter/App.framework
-Flutter/Flutter.framework
-Flutter/Flutter.podspec
-Flutter/Generated.xcconfig
-Flutter/ephemeral/
-Flutter/app.flx
-Flutter/app.zip
-Flutter/flutter_assets/
-Flutter/flutter_export_environment.sh
-ServiceDefinitions.json
-Runner/GeneratedPluginRegistrant.*
-
 # Visual Studio and Windows Related
-flutter/ephemeral/
 *.suo
 *.user
 *.userosscache
@@ -164,4 +150,4 @@ bower_components/
 ################################
 venv/
 env/
-.venv/
+.venv/nexgen_agri/

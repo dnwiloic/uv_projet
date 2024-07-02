@@ -2,6 +2,7 @@ import os
 import pickle
 
 import openai
+import pandas as pd
 from config import openweatherapi, weatherapi
 #import firebase_admin
 #from firebase_admin import db
@@ -12,7 +13,6 @@ from plant import plant
 from requests import get as requests_get
 from requests import post as requests_post
 from werkzeug.utils import secure_filename
-import pandas as pd
 
 """ key={
   "type": "service_account",
@@ -49,7 +49,7 @@ def imagelink():
     return image_link
 
 def load_model():
-    with open('models/NBClassifier.pkl', 'rb') as f:
+    with open('models/crop_recommendation_model.pkl', 'rb') as f:
         return pickle.load(f)
 
 def predict_crop_values(model, data):
@@ -58,45 +58,34 @@ def predict_crop_values(model, data):
 @app.route('/predictCrop', methods=["POST"])
 def predict_crop():
     try:
-        # Load the pre-trained model
+        data = request.json
+        print("Received data:", data)
+        input_data = [float(data[key]) for key in [
+            'nitrogen', 'phosphorus', 'potassium', 'temperature', 'humidity', 'ph', 'rainfall'
+        ]]
+
         model = load_model()
+        pred = predict_crop_values(model, [input_data])
+        print("Prediction:", pred)
 
-        # Extract user input from the POST request
-        data = {
-            'N': float(request.form['nitrogen']),
-            'P': float(request.form['phosphorus']),
-            'K': float(request.form['potassium']),
-            'temperature': float(request.form['temperature']),
-            'humidity': float(request.form['humidity']),
-            'ph': float(request.form['ph']),
-            'rainfall': float(request.form['rainfall'])
-        }
-
-        data_fr = pd.DataFrame([data])
-
-        # Make prediction using the loaded model
-        pred = predict_crop_values(model, data_fr)  # Assuming the model returns a single prediction
-        print(pred)
-        # Look up the predicted crop using the crop dictionary
         crop_dict = {
-            1: 'rice', 2: 'maize', 3: 'jute', 4: 'cotton', 5: 'coconut', 6: 'papaya',
-            7: 'orange', 8: 'apple', 9: 'muskmelon', 10: 'watermelon', 11: 'grapes',
-            12: 'mango', 13: 'banana', 14: 'pomegranate', 15: 'lentil', 16: 'blackgram',
-            17: 'mungbean', 18: 'mothbeans', 19: 'pigeonpeas', 20: 'kidneybeans',
-            21: 'chickpea', 22: 'coffee', 23: 'Soyabeans', 24: 'beans', 25: 'peas',
+            'rice': 1, 'maize': 2, 'jute': 3, 'cotton': 4, 'coconut': 5, 'papaya': 6,
+            'orange': 7, 'apple': 8, 'muskmelon': 9, 'watermelon': 10, 'grapes': 11,
+            'mango': 12, 'banana': 13, 'pomegranate': 14, 'lentil': 15, 'blackgram': 16,
+            'mungbean': 17, 'mothbeans': 18, 'pigeonpeas': 19, 'kidneybeans': 20,
+            'chickpea': 21, 'coffee': 22, 23: 'Soyabeans', 24: 'beans', 25: 'peas',
             26: 'groundnuts', 27: 'cowpeas'
         }
-        # predicted_crop_label = list(crop_dict.keys())[list(crop_dict.values()).index(int(pred))]
-        predicted_crop_label = crop_dict.get(int(pred[0]), 'Unknown crop')
-
-        # Prepare the recommendation result for the response
+        predicted_crop_label = list(crop_dict.keys())[list(crop_dict.values()).index(int(pred[0]))]
         result = f"{predicted_crop_label}"
-        print("result for predict", result)
+        print("Result:", result)
         return jsonify({'result': result})
 
     except Exception as e:
-        print(e)
+        print("Error:", str(e))
         return jsonify({'error': str(e), 'message': 'Error processing the request'})
+
+
 
 @app.route('/weather', methods=['GET'])
 def get_weather():
@@ -201,7 +190,7 @@ def chat_completion():
             #request.json
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 3Vw6h1Kb3lrdpFrk2FaPbztNN17isvj8'  # Replace YOUR_API_KEY with your actual API key
+            'Authorization': 'Bearer khapty6XINJjsgdjFlCIhkY0C8SKpyjB'  # Replace YOUR_API_KEY with your actual API key
         }
         url = 'https://api.mistral.ai/v1/chat/completions'
         response = requests_post(url, json=data, headers=headers)
