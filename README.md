@@ -41,7 +41,7 @@ PlantRecommender est conçu pour simplifier le processus de sélection des plant
 
    ```bash
    git clone https://github.com/uds-master-in-team-ia-2024/uv_projet.git
-   cd PlantRecommender
+   cd uv_projet
    ```
 
 2. Installez les dépendances :
