@@ -1,6 +1,0 @@
-{
-  "name": "my-flask-backend",
-  "scripts": {
-    "postdeploy": "cd backend && pip install -r requirements.txt"
-  }
-}

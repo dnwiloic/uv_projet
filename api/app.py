@@ -49,7 +49,7 @@ def imagelink():
     return image_link
 
 def load_model():
-    with open('models/crop_recommendation_model.pkl', 'rb') as f:
+    with open('models/NBClassifier.pkl', 'rb') as f:
         return pickle.load(f)
 
 def predict_crop_values(model, data):
@@ -69,12 +69,18 @@ def predict_crop():
         print("Prediction:", pred)
 
         crop_dict = {
-            'rice': 1, 'maize': 2, 'jute': 3, 'cotton': 4, 'coconut': 5, 'papaya': 6,
-            'orange': 7, 'apple': 8, 'muskmelon': 9, 'watermelon': 10, 'grapes': 11,
-            'mango': 12, 'banana': 13, 'pomegranate': 14, 'lentil': 15, 'blackgram': 16,
-            'mungbean': 17, 'mothbeans': 18, 'pigeonpeas': 19, 'kidneybeans': 20,
-            'chickpea': 21, 'coffee': 22, 23: 'Soyabeans', 24: 'beans', 25: 'peas',
-            26: 'groundnuts', 27: 'cowpeas'
+            # 'rice': 1, 'maize': 2, 'jute': 3, 'cotton': 4, 'coconut': 5, 'papaya': 6,
+            # 'orange': 7, 'apple': 8, 'muskmelon': 9, 'watermelon': 10, 'grapes': 11,
+            # 'mango': 12, 'banana': 13, 'pomegranate': 14, 'lentil': 15, 'blackgram': 16,
+            # 'mungbean': 17, 'mothbeans': 18, 'pigeonpeas': 19, 'kidneybeans': 20,
+            # 'chickpea': 21, 'coffee': 22, 23: 'Soyabeans', 24: 'beans', 25: 'peas',
+            # 26: 'groundnuts', 27: 'cowpeas'
+            'Soyabeans': 0, 'apple': 1, 'banana': 2,  'beans': 3, 'blackgram': 4,
+            'chickpea': 5, 'coconut': 6, 'coffee': 7, 'cotton': 8, 'cowpeas': 9,
+            'grapes': 10, 'groundnuts': 11, 'jute': 12, 'kidneybeans': 13, 'lentil': 14,
+            'maize': 15, 'mango': 16, 'mothbeans': 17, 'mungbean': 18, 'muskmelon': 19,
+            'orange': 20, 'papaya': 21, 'peas': 22, 'pigeonpeas': 23, 'pomegranate': 24,
+            'rice': 25, 'watermelon': 26
         }
         predicted_crop_label = list(crop_dict.keys())[list(crop_dict.values()).index(int(pred[0]))]
         result = f"{predicted_crop_label}"
