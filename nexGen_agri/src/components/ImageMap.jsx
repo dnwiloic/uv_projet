@@ -20,6 +20,11 @@ const imageMap = {
   watermelon: require("../../assets/Crops/watermelon.jpg"),
   grapes: require("../../assets/Crops/grapes.jpg"),
   pigeonpeas: require("../../assets/Crops/pigeonpeas.jpeg"),
+  Soyabeans: require("../../assets/Crops/Soyabeans.jpeg"),
+  beans: require("../../assets/Crops/beans.jpg"),
+  peas: require("../../assets/Crops/peas.jpg"),
+  groundnuts: require("../../assets/Crops/groundnuts.jpg"),
+  cowpeas: require("../../assets/Crops/cowpeas.jpg"),
 };
 
 export default imageMap;
