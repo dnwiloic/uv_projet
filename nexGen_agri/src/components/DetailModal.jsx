@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { database } from "../../SQLite";
 import imageMap from "./ImageMap";
 
@@ -26,7 +27,7 @@ const DetailModal = ({ visible, item, onClose }) => {
   const handleDelete = async () => {
     Alert.alert(
       "Confirm",
-      "Are you sure you want to delete this recommendation?",
+      "Are you sure you want to delete?",
       [
         {
           text: "No",
@@ -59,6 +60,9 @@ const DetailModal = ({ visible, item, onClose }) => {
       <ScrollView>
         <View style={styles.modalBackground}>
           <View style={styles.modalView}>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Ionicons name="close" size={30} color="red" />
+            </TouchableOpacity>
             <View style={styles.titleContainer}>
               <Text style={styles.modalTitle}>
                 {item.string_recommendation}
@@ -117,6 +121,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
   modalImage: {
     width: 250,
     height: 190,
@@ -131,10 +140,10 @@ const styles = StyleSheet.create({
   infoContainer: {
     alignItems: "flex-start",
     alignSelf: "stretch",
-    marginVertical: 10,
+    //marginVertical: 10,
   },
   infoText: {
-    fontSize: 16,
+    fontSize: 12,
     marginVertical: 2,
   },
   buttonContainer: {

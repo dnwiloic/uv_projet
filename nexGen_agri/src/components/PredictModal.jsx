@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   Image,
@@ -6,11 +7,11 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomAlert from "./CustomAlert";
-
-import { useNavigation } from "@react-navigation/native";
 import imageMap from "./ImageMap";
 
 const PredictModal = ({
@@ -35,8 +36,15 @@ const PredictModal = ({
 
   const handleCancel = () => {
     onClose();
-    navigation.navigate("BottomTabNavigator", {
+    /*navigation.navigate("BottomTabNavigator", {
       screen: "Dashboard",
+      params: { refresh: true },
+    });*/
+  };
+
+  const handleChatbot = () => {
+    navigation.navigate("BottomTabNavigator", {
+      screen: "ChatBot",
       params: { refresh: true },
     });
   };
@@ -51,6 +59,9 @@ const PredictModal = ({
       <ScrollView>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Ionicons name="close" size={30} color="red" />
+            </TouchableOpacity>
             <View style={styles.titleContainer}>
               <Text style={styles.modalTitle}>{predictionResult}</Text>
             </View>
@@ -63,32 +74,10 @@ const PredictModal = ({
               Learn how to cultivate {predictionResult} with the best practices
               for your soil.
             </Text>
-            {formData && (
-              <>
-                <Text style={styles.modalText}>
-                  Nitrogen: {formData.nitrogen}
-                </Text>
-                <Text style={styles.modalText}>
-                  Phosphorus: {formData.phosphorus}
-                </Text>
-                <Text style={styles.modalText}>
-                  Potassium: {formData.potassium}
-                </Text>
-                <Text style={styles.modalText}>pH: {formData.ph}</Text>
-                <Text style={styles.modalText}>
-                  Humidity: {formData.humidity}
-                </Text>
-                <Text style={styles.modalText}>
-                  Rainfall: {formData.rainfall}
-                </Text>
-                <Text style={styles.modalText}>
-                  Temperature: {formData.temperature}
-                </Text>
-              </>
-            )}
+
             <Pressable
               style={[styles.button, styles.buttonChatbot]}
-              onPress={() => alert("Chatbot Activated")}
+              onPress={handleChatbot}
             >
               <Text style={styles.textStyle}>Ask the Chatbot</Text>
             </Pressable>
@@ -135,6 +124,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
   },
   button: {
     borderRadius: 20,

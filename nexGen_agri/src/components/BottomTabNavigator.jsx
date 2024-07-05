@@ -17,10 +17,11 @@ import {
 } from "react-native";
 import { database } from "../../SQLite";
 import { useAuth } from "../context/AuthContext";
-import ChatBot from "../screens/ChatBot";
 import Dashboard from "../screens/Dashboard";
 import Recommend from "../screens/Recommend";
 import Weather from "../screens/Weather";
+
+import Chatbot from "../screens/ChatBot";
 
 const Tab = createBottomTabNavigator();
 
@@ -203,7 +204,9 @@ const BottomTabNavigator = () => {
           ),
         }}
       >
-        {() => <ChatBot userId={userId} />}
+        {({ route }) => (
+          <Chatbot userId={userId} refresh={route.params?.refresh} />
+        )}
       </Tab.Screen>
     </Tab.Navigator>
   );

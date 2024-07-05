@@ -28,6 +28,7 @@ const Recommend = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [predictionResult, setPredictionResult] = useState(null);
+  const [savedFormData, setSavedFormData] = useState(null);
   const [errors, setErrors] = useState({
     nitrogen: null,
     phosphorus: null,
@@ -41,70 +42,64 @@ const Recommend = () => {
   const validateForm = () => {
     const validationErrors = {};
 
+    const isInteger = (value) => Number.isInteger(Number(value));
+
     if (
       !formData.nitrogen ||
-      isNaN(formData.nitrogen) ||
+      !isInteger(formData.nitrogen) ||
       formData.nitrogen <= 0
     ) {
       validationErrors.nitrogen =
-        "Nitrogen is required and must be a positive number.";
+        "Nitrogen is required and must be a positive integer.";
     }
 
     if (
       !formData.phosphorus ||
-      isNaN(formData.phosphorus) ||
+      !isInteger(formData.phosphorus) ||
       formData.phosphorus <= 0
     ) {
       validationErrors.phosphorus =
-        "Phosphorus is required and must be a positive number.";
+        "Phosphorus is required and must be a positive integer.";
     }
 
     if (
       !formData.potassium ||
-      isNaN(formData.potassium) ||
+      !isInteger(formData.potassium) ||
       formData.potassium <= 0
     ) {
       validationErrors.potassium =
-        "Potassium is required and must be a positive number.";
+        "Potassium is required and must be a positive integer.";
     }
 
-    if (
-      !formData.ph ||
-      isNaN(formData.ph) ||
-      formData.ph <= 0 ||
-      formData.ph >= 14
-    ) {
+    // Convert values to float for the following fields
+    const ph = parseFloat(formData.ph);
+    const humidity = parseFloat(formData.humidity);
+    const rainfall = parseFloat(formData.rainfall);
+    const temperature = parseFloat(formData.temperature);
+
+    // Validate pH
+    if (!ph || ph <= 0 || ph > 14) {
       validationErrors.ph =
         "pH is required and must be a positive number between 0 and 14.";
     }
 
-    if (
-      !formData.humidity ||
-      isNaN(formData.humidity) ||
-      formData.humidity <= 0
-    ) {
+    // Validate Humidity
+    if (!humidity || humidity <= 0) {
       validationErrors.humidity =
         "Humidity is required and must be a positive number.";
     }
 
-    if (
-      !formData.rainfall ||
-      isNaN(formData.rainfall) ||
-      formData.rainfall <= 0
-    ) {
+    // Validate Rainfall
+    if (!rainfall || rainfall <= 0) {
       validationErrors.rainfall =
         "Rainfall is required and must be a positive number.";
     }
 
-    if (
-      !formData.temperature ||
-      isNaN(formData.temperature) ||
-      formData.temperature <= 0
-    ) {
+    // Validate Temperature
+    if (!temperature || temperature <= 0) {
       validationErrors.temperature =
         "Temperature is required and must be a positive number.";
     }
-
     setErrors(validationErrors);
 
     return Object.keys(validationErrors).length === 0;
@@ -114,6 +109,27 @@ const Recommend = () => {
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const resetForm = () => {
+    setFormData({
+      nitrogen: "",
+      phosphorus: "",
+      potassium: "",
+      ph: "",
+      humidity: "",
+      rainfall: "",
+      temperature: "",
+    });
+    setErrors({
+      nitrogen: null,
+      phosphorus: null,
+      potassium: null,
+      ph: null,
+      humidity: null,
+      rainfall: null,
+      temperature: null,
     });
   };
 
@@ -133,7 +149,9 @@ const Recommend = () => {
       console.log("API Response:", response.data);
       setPredictionResult(response.data.result);
       console.log(response.data.result);
+      setSavedFormData({ ...formData });
       setModalVisible(true);
+      resetForm();
     } catch (error) {
       console.error("Error making prediction:", error);
     } finally {
@@ -142,7 +160,7 @@ const Recommend = () => {
   };
 
   const handleSave = () => {
-    console.log("Form Data:", formData);
+    console.log("Form Data:", savedFormData);
     setModalVisible(false);
   };
 
@@ -153,88 +171,24 @@ const Recommend = () => {
     >
       <ScrollView style={styles.container}>
         <View style={{ marginTop: 20 }}>
-          <TextInput
-            style={styles.input}
-            placeholder="Nitrogen"
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("nitrogen", text)}
-            value={formData.nitrogen}
-          />
-          {errors.nitrogen && (
-            <Text style={styles.errorText}>{errors.nitrogen}</Text>
-          )}
-
-          <TextInput
-            style={styles.input}
-            placeholder="Phosphorus"
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("phosphorus", text)}
-            value={formData.phosphorus}
-          />
-          {errors.phosphorus && (
-            <Text style={styles.errorText}>{errors.phosphorus}</Text>
-          )}
-
-          <TextInput
-            style={styles.input}
-            placeholder="Potassium"
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("potassium", text)}
-            value={formData.potassium}
-          />
-          {errors.potassium && (
-            <Text style={styles.errorText}>{errors.potassium}</Text>
-          )}
-
-          <TextInput
-            style={styles.input}
-            placeholder="PH"
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("ph", text)}
-            value={formData.ph}
-          />
-          {errors.ph && <Text style={styles.errorText}>{errors.ph}</Text>}
-
-          <TextInput
-            style={styles.input}
-            placeholder="Humidity (%)"
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("humidity", text)}
-            value={formData.humidity}
-          />
-          {errors.humidity && (
-            <Text style={styles.errorText}>{errors.humidity}</Text>
-          )}
-
-          <TextInput
-            style={styles.input}
-            placeholder="Rainfall"
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("rainfall", text)}
-            value={formData.rainfall}
-          />
-          {errors.rainfall && (
-            <Text style={styles.errorText}>{errors.rainfall}</Text>
-          )}
-
-          <TextInput
-            style={styles.input}
-            placeholder="Temperature (°C)"
-            keyboardType="numeric"
-            onChangeText={(text) => handleInputChange("temperature", text)}
-            value={formData.temperature}
-          />
-          {errors.temperature && (
-            <Text style={styles.errorText}>{errors.temperature}</Text>
-          )}
-
-          <View
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: 20,
-            }}
-          >
+          {Object.keys(formData).map((key) => (
+            <View key={key} style={styles.inputWrapper}>
+              <Text style={styles.label}>
+                {key.charAt(0).toUpperCase() + key.slice(1)}
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder={key.charAt(0).toUpperCase() + key.slice(1)}
+                keyboardType="numeric"
+                onChangeText={(text) => handleInputChange(key, text)}
+                value={formData[key]}
+              />
+              {errors[key] && (
+                <Text style={styles.errorText}>{errors[key]}</Text>
+              )}
+            </View>
+          ))}
+          <View style={styles.buttonContainer}>
             <Pressable style={styles.button} onPress={handleSubmit}>
               {isLoading ? (
                 <ActivityIndicator size="small" color="green" />
@@ -250,7 +204,7 @@ const Recommend = () => {
         onClose={() => setModalVisible(false)}
         onSave={handleSave}
         predictionResult={predictionResult}
-        formData={formData}
+        formData={savedFormData}
       />
     </ImageBackground>
   );
@@ -268,13 +222,31 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.8)",
     width: Dimensions.get("window").width,
   },
+  inputWrapper: {
+    marginBottom: 20,
+  },
+  label: {
+    position: "absolute",
+    top: -10,
+    left: 15,
+    backgroundColor: "lightgray",
+    paddingHorizontal: 5,
+    zIndex: 1,
+    color: "rgba(0, 0, 0, 0.6)",
+  },
   input: {
     height: 50,
-    marginBottom: 20,
     borderWidth: 2,
     padding: 10,
     borderRadius: 5,
     borderColor: "rgba(0, 0, 0, 0.2)",
+    paddingLeft: 15,
+    fontSize: 10,
+  },
+  buttonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
   },
   button: {
     width: "40%",
@@ -290,7 +262,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "#FF0000",
-    marginBottom: 10,
+    marginTop: 5,
     fontSize: 12,
   },
 });

@@ -1,5 +1,5 @@
 import { FontAwesome } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
@@ -16,11 +16,12 @@ import DetailModal from "../components/DetailModal";
 import imageMap from "../components/ImageMap";
 import { useAuth } from "../context/AuthContext";
 
-const Dashboard = ({ navigation, route }) => {
+const Dashboard = ({ route }) => {
   const { authState } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
+  const navigation = useNavigation();
 
   const fetchRecommendations = async () => {
     if (authState.user) {
@@ -86,6 +87,13 @@ const Dashboard = ({ navigation, route }) => {
     setSelectedItem(null);
   };
 
+  const handleExplore = () => {
+    navigation.navigate("BottomTabNavigator", {
+      screen: "Recommend",
+      params: { refresh: true },
+    });
+  };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
@@ -132,7 +140,7 @@ const Dashboard = ({ navigation, route }) => {
           </Text>
           <TouchableOpacity
             style={styles.exploreButton}
-            onPress={() => navigation.navigate("Explore")}
+            onPress={handleExplore}
           >
             <Text style={styles.exploreButtonText}>Explore Now</Text>
           </TouchableOpacity>
