@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "nexgen_agri",
+    "slug": "nexgen_agri",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.jpg",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/logo.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/background.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.lidelle.nexgen_agri"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "da0743d6-410f-41f7-bc90-b5f78b74c8c0"
+      }
+    }
+  }
+}
