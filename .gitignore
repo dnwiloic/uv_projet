@@ -133,6 +133,8 @@ Thumbs.db
 *.booproj
 *.svd
 
+.buildpacks
+
 # Build results #
 #################
 [Dd]ebug/

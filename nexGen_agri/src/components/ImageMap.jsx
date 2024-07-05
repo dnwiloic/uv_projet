@@ -1,0 +1,25 @@
+const imageMap = {
+  apple: require("../../assets/Crops/apple.jpg"),
+  coffee: require("../../assets/Crops/coffee.jpg"),
+  banana: require("../../assets/Crops/banana.jpg"),
+  blackgram: require("../../assets/Crops/blackgram.jpg"),
+  chickpea: require("../../assets/Crops/chickpea.jpg"),
+  coconut: require("../../assets/Crops/coconut.jpg"),
+  cotton: require("../../assets/Crops/cotton.jpg"),
+  jute: require("../../assets/Crops/jute.jpg"),
+  kidneybeans: require("../../assets/Crops/kidneybeans.jpg"),
+  lentil: require("../../assets/Crops/lentil.jpg"),
+  mango: require("../../assets/Crops/mango.jpg"),
+  mothbeans: require("../../assets/Crops/mothbeans.jpg"),
+  mungbean: require("../../assets/Crops/mungbean.jpg"),
+  muskmelon: require("../../assets/Crops/muskmelon.jpg"),
+  orange: require("../../assets/Crops/orange.jpg"),
+  papaya: require("../../assets/Crops/papaya.jpg"),
+  pomegranate: require("../../assets/Crops/pomegranate.jpg"),
+  rice: require("../../assets/Crops/rice.jpg"),
+  watermelon: require("../../assets/Crops/watermelon.jpg"),
+  grapes: require("../../assets/Crops/grapes.jpg"),
+  pigeonpeas: require("../../assets/Crops/pigeonpeas.jpeg"),
+};
+
+export default imageMap;
