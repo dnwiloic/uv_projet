@@ -127,14 +127,17 @@ const Login = () => {
               <Text style={styles.buttonText}>Login</Text>
             )}
           </Pressable>
-          <Pressable
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate("Register");
-            }}
-          >
-            <Text style={styles.buttonText}>Register</Text>
-          </Pressable>
+          <View style={styles.switch}>
+            <Text style={styles.switchText}>Not have an account? </Text>
+            <Pressable
+              style={styles.switchPressable}
+              onPress={() => {
+                navigation.navigate("Register");
+              }}
+            >
+              <Text style={styles.switchTextP}>Register</Text>
+            </Pressable>
+          </View>
         </View>
       </ScrollView>
       <Snackbar
@@ -216,5 +219,30 @@ const styles = StyleSheet.create({
     color: "#FF0000",
     marginBottom: 10,
     fontSize: 12,
+  },
+  switch: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  switchPressable: {
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    // backgroundColor: "#555",
+    color: "#fff",
+  },
+  switchText: {
+    // backgroundColor: "#999",
+    fontSize: 20,
+    color: "#fff",
+  },
+  switchTextP: {
+    color: "#ccc",
+    marginTop: "15px",
+    textDecorationLine: "underline",
+    fontSize: 20,
+    // color: "#fff",
   },
 });

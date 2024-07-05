@@ -118,8 +118,8 @@ def get_weather():
 @app.route('/forecast', methods=['GET'])
 def get_four_day_forecast():
     # Retrieve latitude and longitude from request arguments
-    lat = request.args.get('lat', '33.44')  # Default latitude if none provided
-    lon = request.args.get('lon', '-94.04')  # Default longitude if none provided
+    lat = request.args.get('lat', '5.28')  # Default latitude if none provided
+    lon = request.args.get('lon', '10.28')  # Default longitude if none provided
     api_key = openweatherapi
 
     # Construct the API URL

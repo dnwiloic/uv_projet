@@ -8,6 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { api_url } from "../context/Constant";
 
 const WeatherScreen = () => {
   const [weatherDetails, setWeatherDetails] = useState(null);
@@ -17,25 +18,19 @@ const WeatherScreen = () => {
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const weatherResponse = await axios.get(
-          "https://flask-app-v8v8.onrender.com/weather",
-          {
-            params: {
-              lat: "33.44",
-              lon: "-94.04",
-            },
-          }
-        );
+        const weatherResponse = await axios.get(api_url + "/weather", {
+          params: {
+            lat: "33.44",
+            lon: "-94.04",
+          },
+        });
 
-        const forecastResponse = await axios.get(
-          "https://flask-app-v8v8.onrender.com/forecast",
-          {
-            params: {
-              lat: "33.44",
-              lon: "-94.04",
-            },
-          }
-        );
+        const forecastResponse = await axios.get(api_url + "/forecast", {
+          params: {
+            lat: "33.44",
+            lon: "-94.04",
+          },
+        });
 
         const weatherData = weatherResponse.data;
         const forecastData = forecastResponse.data;

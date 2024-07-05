@@ -15,6 +15,7 @@ import {
   View,
 } from "react-native";
 import { database } from "../../SQLite";
+import { api_url } from "../context/Constant";
 
 const Chatbot = ({ userId }) => {
   const [messages, setMessages] = useState([
@@ -52,12 +53,9 @@ const Chatbot = ({ userId }) => {
   const fetchBotResponse = async (message) => {
     setIsLoading(true);
     try {
-      const response = await axios.post(
-        "https://flask-app-v8v8.onrender.com/chat_completion",
-        {
-          prompt: message,
-        }
-      );
+      const response = await axios.post(api_url + "/chat_completion", {
+        prompt: message,
+      });
 
       const botMessage = response.data.response;
       setMessages((prevMessages) => [

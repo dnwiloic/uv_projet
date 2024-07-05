@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import PredictModal from "../components/PredictModal";
+import { api_url } from "../context/Constant";
 
 const Recommend = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -67,8 +68,14 @@ const Recommend = () => {
         "Potassium is required and must be a positive number.";
     }
 
-    if (!formData.ph || isNaN(formData.ph) || formData.ph <= 0) {
-      validationErrors.ph = "pH is required and must be a positive number.";
+    if (
+      !formData.ph ||
+      isNaN(formData.ph) ||
+      formData.ph <= 0 ||
+      formData.ph >= 14
+    ) {
+      validationErrors.ph =
+        "pH is required and must be a positive number between 0 and 14.";
     }
 
     if (
@@ -118,7 +125,7 @@ const Recommend = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "https://flask-app-v8v8.onrender.com/predictCrop",
+        api_url + "/predictCrop",
         JSON.stringify(formData),
         { headers: { "Content-Type": "application/json" } }
       );
@@ -181,7 +188,7 @@ const Recommend = () => {
 
           <TextInput
             style={styles.input}
-            placeholder="pH"
+            placeholder="PH"
             keyboardType="numeric"
             onChangeText={(text) => handleInputChange("ph", text)}
             value={formData.ph}
