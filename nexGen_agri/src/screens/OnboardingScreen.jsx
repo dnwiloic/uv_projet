@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   Image,
@@ -37,6 +37,7 @@ const OnboardingScreen = () => {
   const navigation = useNavigation();
   const [currentPage, setCurrentPage] = useState(0);
   const scrollViewRef = useRef(null);
+  const timerRef = useRef(null);
 
   const handleScroll = (event) => {
     const pageIndex = Math.round(event.nativeEvent.contentOffset.x / width);
@@ -50,8 +51,9 @@ const OnboardingScreen = () => {
         animated: true,
       });
     } else {
-      navigation.navigate("Register");
+      navigation.navigate("Login");
     }
+    //resetTimer();
   };
 
   const handlePrevious = () => {
@@ -61,14 +63,30 @@ const OnboardingScreen = () => {
         animated: true,
       });
     }
+    resetTimer();
   };
 
   const handleSkip = () => {
-    scrollViewRef.current.scrollTo({
-      x: width * (pages.length - 1),
-      animated: true,
-    });
+    navigation.navigate("Login");
   };
+
+  const resetTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = setTimeout(() => {
+      handleNext();
+    }, 10000);
+  };
+
+  useEffect(() => {
+    resetTimer();
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [currentPage]);
 
   return (
     <View style={styles.container}>

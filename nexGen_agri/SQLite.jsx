@@ -117,7 +117,7 @@ const saveRecommendation = async (userId, formData, predictionResult) => {
         formData.temperature,
         formData.humidity,
         formData.rainfall,
-        formData.pH,
+        formData.ph,
         predictionResult,
       ]
     );

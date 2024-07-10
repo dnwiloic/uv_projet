@@ -17,7 +17,7 @@ import {
 import { database } from "../../SQLite";
 import { api_url } from "../context/Constant";
 
-const Chatbot = ({ userId }) => {
+const Chatbot = ({ userId, refresh }) => {
   const [messages, setMessages] = useState([
     {
       type: "bot",
@@ -34,11 +34,18 @@ const Chatbot = ({ userId }) => {
         setMessages(
           chatHistory.map((msg) => ({ type: msg.role, text: msg.content }))
         );
+      } else {
+        setMessages([
+          {
+            type: "bot",
+            text: "Welcome to NexGen_Agri Chatbot. How can I assist you today?",
+          },
+        ]);
       }
     };
 
     fetchChatHistory();
-  }, [userId]);
+  }, [userId, refresh]);
 
   const sendMessage = async () => {
     if (newMessage.trim()) {

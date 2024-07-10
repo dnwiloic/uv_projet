@@ -235,14 +235,14 @@ const styles = StyleSheet.create({
   },
   switchText: {
     // backgroundColor: "#999",
-    fontSize: 20,
+    fontSize: 15,
     color: "#fff",
   },
   switchTextP: {
     color: "#ccc",
     marginTop: "15px",
     textDecorationLine: "underline",
-    fontSize: 20,
+    fontSize: 16,
     // color: "#fff",
   },
 });
