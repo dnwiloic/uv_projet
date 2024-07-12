@@ -19,8 +19,8 @@ const CustomAlert = ({
   predictionResult,
 }) => {
   const navigation = useNavigation();
-  const { authState } = useAuth();
-  const userId = authState.user.id;
+  const { user } = useAuth();
+  const userId = user.uid;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {

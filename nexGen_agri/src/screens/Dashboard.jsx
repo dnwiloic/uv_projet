@@ -17,16 +17,16 @@ import imageMap from "../components/ImageMap";
 import { useAuth } from "../context/AuthContext";
 
 const Dashboard = ({ route }) => {
-  const { authState } = useAuth();
+  const { user } = useAuth();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const navigation = useNavigation();
 
   const fetchRecommendations = async () => {
-    if (authState.user) {
+    if (user) {
       const userRecommendations = await database.getRecommendationsByUserId(
-        authState.user.id
+        user.uid
       );
       setRecommendations(userRecommendations);
     }
@@ -54,7 +54,7 @@ const Dashboard = ({ route }) => {
 
   useEffect(() => {
     fetchRecommendations();
-  }, [authState.user]);
+  }, [user.uid]);
 
   const createTwoButtonAlertQuit = () =>
     Alert.alert(
@@ -100,9 +100,7 @@ const Dashboard = ({ route }) => {
         <FontAwesome name="user-circle" size={40} color="#4CAF50" />
         <View style={styles.welcomeContainer}>
           <Text style={styles.welcomeText}>Welcome,</Text>
-          <Text style={styles.emailText}>
-            {authState.user ? authState.user.email : "Guest"}
-          </Text>
+          <Text style={styles.emailText}>{user ? user.email : "Guest"}</Text>
         </View>
       </View>
       <Text style={styles.sectionTitle}>Recommendations</Text>

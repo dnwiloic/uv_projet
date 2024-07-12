@@ -13,7 +13,6 @@ import {
   View,
 } from "react-native";
 import { Snackbar } from "react-native-paper";
-import { database } from "../../../SQLite";
 import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
@@ -27,6 +26,7 @@ const Login = () => {
     email: null,
     password: null,
   });
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleLogin = async () => {
     setIsLoading(true);
@@ -48,23 +48,16 @@ const Login = () => {
     }
 
     try {
-      const result = await database.login(email, password);
-      if (result.success) {
-        console.log(result.user);
-        login(result.user);
-        setVisible(true);
-        setTimeout(() => {
-          navigation.navigate("BottomTabNavigator");
-        }, 1500);
-
-        resetAndNavigate();
-      } else {
-        console.log(result.message);
-        setErrors({ email: result.message });
-      }
+      await login(email, password);
+      setSnackbarMessage("Login successful!");
+      setVisible(true);
+      setTimeout(() => {
+        navigation.navigate("BottomTabNavigator");
+      }, 1500);
+      resetAndNavigate();
     } catch (error) {
-      console.error("Login failed:", error);
-      setErrors({ email: "An error occurred during login." });
+      setSnackbarMessage("Invalid email or password.");
+      setVisible(true);
     } finally {
       setIsLoading(false);
     }
@@ -147,7 +140,8 @@ const Login = () => {
         style={styles.snackbar}
         wrapperStyle={styles.snackbarWrapper}
       >
-        <Text style={styles.snackbarText}>Login successfully</Text>
+        <Text style={styles.snackbarText}>{snackbarMessage}</Text>
+        {/* Use snackbarMessage */}
       </Snackbar>
     </ImageBackground>
   );

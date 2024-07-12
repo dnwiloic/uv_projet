@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,9 +13,10 @@ import {
   View,
 } from "react-native";
 import { Snackbar } from "react-native-paper";
-import { database } from "../../../SQLite";
+import { useAuth } from "../../context/AuthContext";
 
 const Register = () => {
+  const { register } = useAuth();
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -30,10 +31,6 @@ const Register = () => {
     password: null,
     confirmPassword: null,
   });
-
-  useEffect(() => {
-    database.init();
-  }, []);
 
   const handleRegister = async () => {
     setIsLoading(true);
@@ -75,14 +72,12 @@ const Register = () => {
     }
 
     try {
-      const result = await database.register(username, email, password);
+      await register(email, password, username);
+      setSnackbarMessage("Registration successful!");
       setVisible(true);
-      setSnackbarMessage(result.message);
-      if (result.success) {
-        resetAndNavigate();
-      }
+      resetAndNavigate();
     } catch (error) {
-      setSnackbarMessage("An error occurred during registration.");
+      setSnackbarMessage("Email already exist");
       setVisible(true);
     } finally {
       setIsLoading(false);
