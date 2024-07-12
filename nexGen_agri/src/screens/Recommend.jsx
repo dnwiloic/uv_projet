@@ -123,6 +123,8 @@ const Recommend = () => {
       ph: null,
       city: null,
     });
+    setSelectedCity(null);
+    setValue(null);
   };
 
   const handleCityChange = async (city) => {
@@ -172,7 +174,6 @@ const Recommend = () => {
       setSavedFormData({ ...formData });
       setModalVisible(true);
       resetForm();
-      setSelectedCity(null);
     } catch (error) {
       console.error("Error making prediction:", error);
     } finally {
@@ -203,7 +204,7 @@ const Recommend = () => {
               setItems={setItems}
               onChangeValue={(value) => handleCityChange(value)}
               placeholder="Select a city"
-              style={styles.input}
+              style={styles.inputD}
               placeholderStyle={styles.placeholderStyle}
               selectedTextStyle={styles.selectedTextStyle}
               inputSearchStyle={styles.inputSearchStyle}
@@ -288,6 +289,16 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0, 0, 0, 0.2)",
     paddingLeft: 15,
     fontSize: 10,
+  },
+  inputD: {
+    height: 50,
+    borderWidth: 2,
+    padding: 10,
+    borderRadius: 5,
+    borderColor: "rgba(0, 0, 0, 0.2)",
+    paddingLeft: 15,
+    fontSize: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   buttonContainer: {
     alignItems: "center",

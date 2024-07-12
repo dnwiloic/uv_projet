@@ -54,7 +54,7 @@ const Dashboard = ({ route }) => {
 
   useEffect(() => {
     fetchRecommendations();
-  }, [user.uid]);
+  }, [user?.uid]);
 
   const createTwoButtonAlertQuit = () =>
     Alert.alert(
@@ -103,52 +103,60 @@ const Dashboard = ({ route }) => {
           <Text style={styles.emailText}>{user ? user.email : "Guest"}</Text>
         </View>
       </View>
+
       <Text style={styles.sectionTitle}>Recommendations</Text>
-      {recommendations.length > 0 ? (
-        <View style={{ padding: 5 }}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.recommendationsContainer}
-          >
-            {recommendations.map((item) => (
-              <TouchableOpacity
-                key={item.id}
-                style={styles.card}
-                onPress={() => handleOpenModal(item)}
-              >
-                <Image
-                  source={imageMap[item.string_recommendation?.toLowerCase()]}
-                  style={styles.cardImage}
-                />
-                <Text style={styles.cardText}>
-                  {item.string_recommendation}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      ) : (
-        <View style={styles.noRecommendationsContainer}>
-          <Text style={styles.noRecommendationsText}>
-            You have no recommendations yet.
-          </Text>
-          <Text style={styles.noRecommendationsSubText}>
-            Start exploring and adding your favorite cultural recommendations!
-          </Text>
-          <TouchableOpacity
-            style={styles.exploreButton}
-            onPress={handleExplore}
-          >
-            <Text style={styles.exploreButtonText}>Explore Now</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      <DetailModal
-        visible={modalVisible}
-        item={selectedItem}
-        onClose={handleCloseModal}
-      />
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        {recommendations.length > 0 ? (
+          <View style={{ padding: 5 }}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.recommendationsContainer}
+            >
+              {recommendations.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.card}
+                  onPress={() => handleOpenModal(item)}
+                >
+                  <Image
+                    source={imageMap[item.string_recommendation?.toLowerCase()]}
+                    style={styles.cardImage}
+                  />
+                  <View style={styles.cardTextContainer}>
+                    <Text style={styles.cardText}>
+                      {item.string_recommendation.toUpperCase()}
+                    </Text>
+                    <Text style={styles.tapForDetailsText}>
+                      Tap for details
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        ) : (
+          <View style={styles.noRecommendationsContainer}>
+            <Text style={styles.noRecommendationsText}>
+              You have no recommendations yet.
+            </Text>
+            <Text style={styles.noRecommendationsSubText}>
+              Start exploring and adding your favorite cultural recommendations!
+            </Text>
+            <TouchableOpacity
+              style={styles.exploreButton}
+              onPress={handleExplore}
+            >
+              <Text style={styles.exploreButtonText}>Explore Now</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        <DetailModal
+          visible={modalVisible}
+          item={selectedItem}
+          onClose={handleCloseModal}
+        />
+      </View>
     </ScrollView>
   );
 };
@@ -214,15 +222,23 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  cardText: {
+  cardTextContainer: {
     position: "absolute",
-    bottom: 0,
+    bottom: 100,
     width: "100%",
     textAlign: "center",
     padding: 5,
     backgroundColor: "rgba(0,0,0,0.5)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 14,
+  },
+  tapForDetailsText: {
+    color: "white",
+    fontSize: 12,
   },
   alertContainer: {
     backgroundColor: "lightgrey",
