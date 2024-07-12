@@ -17,19 +17,16 @@ import {
 } from "react-native";
 import { database } from "../../SQLite";
 import { useAuth } from "../context/AuthContext";
+import Chatbot from "../screens/ChatBot";
 import Dashboard from "../screens/Dashboard";
 import Recommend from "../screens/Recommend";
 import Weather from "../screens/Weather";
-
-import Chatbot from "../screens/ChatBot";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
   const navigation = useNavigation();
-  const { logout } = useAuth();
-  const { authState } = useAuth();
-  const userId = authState.user?.id;
+  const { user, logout } = useAuth();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleLogout = () => {
@@ -54,11 +51,11 @@ const BottomTabNavigator = () => {
   };
 
   const handleClearHistory = async () => {
-    await database.deleteChatHistoryByUserId(userId);
+    await database.deleteChatHistoryByUserId(user?.uid);
     setIsModalVisible(false);
     navigation.navigate("BottomTabNavigator", {
       screen: "ChatBot",
-      params: { refresh: true, userId },
+      params: { refresh: true, userId: user?.uid },
     });
   };
 
@@ -205,7 +202,7 @@ const BottomTabNavigator = () => {
         }}
       >
         {({ route }) => (
-          <Chatbot userId={userId} refresh={route.params?.refresh} />
+          <Chatbot userId={user?.uid} refresh={route.params?.refresh} />
         )}
       </Tab.Screen>
     </Tab.Navigator>

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { LogBox, Platform, StatusBar, StyleSheet } from "react-native";
 import { database } from "./SQLite";
 import Route from "./src/Route";
 import { AuthProvider } from "./src/context/AuthContext";
@@ -10,14 +10,12 @@ export default function App() {
     database.init();
   }, []);
 
+  LogBox.ignoreAllLogs();
+
   return (
     <AuthProvider>
       <Route />
     </AuthProvider>
-    /*<View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>*/
   );
 }
 
@@ -27,5 +25,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  safeArea: {
+    flex: 1,
+    backgroundColor: "green",
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

@@ -19,18 +19,10 @@ const deleteDatabase = async () => {
 const init = async () => {
   db = await SQLite.openDatabaseAsync("NexGenAgri.db");
 
-  // Création de la table Utilisateur
-  const queryUser = `CREATE TABLE IF NOT EXISTS Users (
-    id INTEGER PRIMARY KEY NOT NULL,
-    nom TEXT NOT NULL,
-    email TEXT NOT NULL UNIQUE,
-    motDePasse TEXT NOT NULL
-  );`;
-
-  // Création de la table Recommendation avec clé étrangère
+  // Création de la table Recommendation avec userId
   const queryRecommendation = `CREATE TABLE IF NOT EXISTS Recommendation (
     id INTEGER PRIMARY KEY NOT NULL,
-    user_id INTEGER NOT NULL,
+    userId TEXT NOT NULL,
     N FLOAT,
     P FLOAT,
     K FLOAT,
@@ -38,8 +30,7 @@ const init = async () => {
     humidity FLOAT,
     rainfall FLOAT,
     pH FLOAT,
-    string_recommendation TEXT,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    string_recommendation TEXT
   );`;
 
   // Création de la table Weather
@@ -56,17 +47,15 @@ const init = async () => {
     airQuality TEXT
   );`;
 
-  // Création de la table ChatHistory
+  // Création de la table ChatHistory avec userId
   const queryChatHistory = `CREATE TABLE IF NOT EXISTS ChatHistory (
     id INTEGER PRIMARY KEY NOT NULL,
-    user_id INTEGER NOT NULL,
+    userId TEXT NOT NULL,
     role TEXT,
-    content TEXT,
-    FOREIGN KEY (user_id) REFERENCES Users(id)
+    content TEXT
   );`;
 
   try {
-    await db.execAsync(queryUser);
     await db.execAsync(queryRecommendation);
     await db.execAsync(queryWeather);
     await db.execAsync(queryChatHistory);
@@ -76,39 +65,10 @@ const init = async () => {
   }
 };
 
-const register = async (nom, email, motDePasse) => {
-  try {
-    await db.runAsync(
-      "INSERT INTO Users (nom, email, motDePasse) VALUES (?, ?, ?)",
-      [nom, email, motDePasse]
-    );
-    return { success: true, message: "User registered successfully" };
-  } catch (error) {
-    if (error.message.includes("UNIQUE constraint failed")) {
-      return { success: false, message: "Email already exists" };
-    }
-    return { success: false, message: "An error occurred during registration" };
-  }
-};
-
-const login = async (email, password) => {
-  db = await SQLite.openDatabaseAsync("NexGenAgri.db");
-  try {
-    const query = `SELECT id, nom, email FROM Users WHERE email = ? AND motDePasse = ?`;
-    const user = await db.getFirstAsync(query, [email, password]);
-    return user
-      ? { success: true, user }
-      : { success: false, message: "Invalid email or password." };
-  } catch (error) {
-    console.error("Database login error:", error);
-    return { success: false, message: "An error occurred during login." };
-  }
-};
-
 const saveRecommendation = async (userId, formData, predictionResult) => {
   try {
     await db.runAsync(
-      "INSERT INTO Recommendation (user_id, N, P, K, temperature, humidity, rainfall, pH, string_recommendation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO Recommendation (userId, N, P, K, temperature, humidity, rainfall, pH, string_recommendation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         userId,
         formData.nitrogen,
@@ -126,10 +86,9 @@ const saveRecommendation = async (userId, formData, predictionResult) => {
     console.log("Error saving recommendation: ", error);
   }
 };
-
-export const getRecommendationsByUserId = async (userId) => {
+const getRecommendationsByUserId = async (userId) => {
   try {
-    const query = "SELECT * FROM Recommendation WHERE user_id = ?";
+    const query = "SELECT * FROM Recommendation WHERE userId = ?";
     const results = await db.getAllAsync(query, [userId]);
     return results;
   } catch (error) {
@@ -152,7 +111,7 @@ const deleteRecommendation = async (recommendationId) => {
 const saveChatHistory = async (userId, role, content) => {
   try {
     await db.runAsync(
-      "INSERT INTO ChatHistory (user_id, role, content) VALUES (?, ?, ?)",
+      "INSERT INTO ChatHistory (userId, role, content) VALUES (?, ?, ?)",
       [userId, role, content]
     );
     console.log("Chat history saved successfully");
@@ -163,7 +122,7 @@ const saveChatHistory = async (userId, role, content) => {
 
 const getChatHistoryByUserId = async (userId) => {
   try {
-    const query = "SELECT role, content FROM ChatHistory WHERE user_id = ?";
+    const query = "SELECT role, content FROM ChatHistory WHERE userId = ?";
     const results = await db.getAllAsync(query, [userId]);
     return results;
   } catch (error) {
@@ -171,9 +130,10 @@ const getChatHistoryByUserId = async (userId) => {
     return [];
   }
 };
+
 const deleteChatHistoryByUserId = async (userId) => {
   try {
-    await db.runAsync("DELETE FROM ChatHistory WHERE user_id = ?", [userId]);
+    await db.runAsync("DELETE FROM ChatHistory WHERE userId = ?", [userId]);
     console.log("Chat history deleted successfully");
   } catch (error) {
     console.log("Error deleting chat history: ", error);
@@ -182,8 +142,6 @@ const deleteChatHistoryByUserId = async (userId) => {
 
 export const database = {
   init,
-  register,
-  login,
   saveRecommendation,
   deleteDatabase,
   getRecommendationsByUserId,
