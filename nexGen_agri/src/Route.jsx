@@ -4,9 +4,10 @@ import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import BottomTabNavigator from "./components/BottomTabNavigator";
 import { useAuth } from "./context/AuthContext";
-import OnboardingScreen from "./screens/OnboardingScreen";
 import Login from "./screens/auth/Login";
 import Register from "./screens/auth/Register";
+import OnboardingScreen from "./screens/OnboardingScreen";
+import SplashScreen from "./screens/SplashScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,7 @@ const Route = () => {
     if (user) {
       setInitialRoute("BottomTabNavigator");
     } else {
-      setInitialRoute("Onboarding");
+      setInitialRoute("SplashScreen");
     }
   }, [user]);
 
@@ -41,6 +42,11 @@ const Route = () => {
           headerTintColor: "#fff",
         }}
       >
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Onboarding"
           component={OnboardingScreen}

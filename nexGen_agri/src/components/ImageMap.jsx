@@ -25,6 +25,7 @@ const imageMap = {
   peas: require("../../assets/Crops/peas.jpg"),
   groundnuts: require("../../assets/Crops/groundnuts.jpg"),
   cowpeas: require("../../assets/Crops/cowpeas.jpg"),
+  maize: require("../../assets/Crops/maize.jpg"),
 };
 
 export default imageMap;

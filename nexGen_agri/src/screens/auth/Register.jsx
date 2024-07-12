@@ -19,7 +19,7 @@ const Register = () => {
   const { register } = useAuth();
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [visible, setVisible] = useState(false);
@@ -35,10 +35,6 @@ const Register = () => {
   const handleRegister = async () => {
     setIsLoading(true);
     const validationErrors = {};
-
-    if (!username) {
-      validationErrors.username = "Username is required.";
-    }
 
     if (!email) {
       validationErrors.email = "Email is required.";
@@ -72,7 +68,7 @@ const Register = () => {
     }
 
     try {
-      await register(email, password, username);
+      await register(email, password);
       setSnackbarMessage("Registration successful!");
       setVisible(true);
       resetAndNavigate();
@@ -86,11 +82,10 @@ const Register = () => {
 
   const resetAndNavigate = () => {
     setEmail("");
-    setUsername("");
+
     setPassword("");
     setConfirmPassword("");
     setErrors({
-      username: null,
       email: null,
       password: null,
       confirmPassword: null,
@@ -131,15 +126,7 @@ const Register = () => {
             onChangeText={setEmail}
           />
           {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            value={username}
-            onChangeText={setUsername}
-          />
-          {errors.username && (
-            <Text style={styles.errorText}>{errors.username}</Text>
-          )}
+
           <TextInput
             style={styles.input}
             placeholder="Password"
@@ -218,6 +205,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flexDirection: "row",
+    marginTop: 10,
   },
   image: {
     width: 50,
