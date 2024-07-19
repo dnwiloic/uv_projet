@@ -17,7 +17,8 @@ import {
 import { database } from "../../SQLite";
 import { api_url } from "../context/Constant";
 
-const Chatbot = ({ userId, refresh }) => {
+const Chatbot = ({ userId, refresh, initialMessage }) => {
+  console.log(initialMessage);
   const [messages, setMessages] = useState([
     {
       type: "bot",
@@ -131,7 +132,7 @@ const Chatbot = ({ userId, refresh }) => {
             style={styles.input}
             value={newMessage}
             onChangeText={setNewMessage}
-            placeholder="Enter your message"
+            placeholder={initialMessage ? initialMessage : "Enter your message"}
             placeholderTextColor="#ccc"
             onSubmitEditing={sendMessage}
           />

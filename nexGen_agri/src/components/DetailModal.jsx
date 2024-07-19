@@ -65,7 +65,7 @@ const DetailModal = ({ visible, item, onClose }) => {
             </TouchableOpacity>
             <View style={styles.titleContainer}>
               <Text style={styles.modalTitle}>
-                {item.string_recommendation}
+                {item.string_recommendation.toUpperCase()}
               </Text>
             </View>
             <Image

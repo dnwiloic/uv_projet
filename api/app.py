@@ -196,7 +196,7 @@ def chat_completion():
             #request.json
         headers = {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer khapty6XINJjsgdjFlCIhkY0C8SKpyjB'  # Replace YOUR_API_KEY with your actual API key
+            'Authorization': 'Bearer bbTeOXXkQFAj9IkEZQbGdgPxWjE0atLc'  # Replace YOUR_API_KEY with your actual API key
         }
         url = 'https://api.mistral.ai/v1/chat/completions'
         response = requests_post(url, json=data, headers=headers)

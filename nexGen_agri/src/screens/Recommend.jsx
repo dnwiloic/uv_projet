@@ -15,10 +15,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import PredictModal from "../components/PredictModal";
 import { api_url } from "../context/Constant";
 
-const cities = [
-  { label: "City 1", value: { lat: "33.44", lon: "-94.04" }, key: "1" },
-  { label: "City 2", value: { lat: "40.71", lon: "-74.01" }, key: "2" },
-];
+import cities from "../components/Cities";
 
 const Recommend = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -660,6 +657,7 @@ import {
 } from "react-native";
 import PredictModal from "../components/PredictModal";
 import { api_url } from "../context/Constant";
+import cities from '../components/Cities';
 
 const Recommend = () => {
   const [isLoading, setIsLoading] = useState(false);

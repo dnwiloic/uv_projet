@@ -1,6 +1,5 @@
 @startuml
     class Utilisateur {
-        -String nom
         -String email
         -String motDePasse
         +sInscrire()

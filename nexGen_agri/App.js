@@ -15,7 +15,7 @@ export default function App() {
   return (
     <AuthProvider>
       <Route />
-      <StatusBar backgroundColor="green" barStyle="dark-content" />
+      <StatusBar backgroundColor="green" barStyle="light-content" />
     </AuthProvider>
   );
 }

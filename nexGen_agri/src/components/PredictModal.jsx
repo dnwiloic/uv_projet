@@ -43,9 +43,11 @@ const PredictModal = ({
   };
 
   const handleChatbot = () => {
+    const message = `Learn how to cultivate ${predictionResult}`;
+    console.log(message);
     navigation.navigate("BottomTabNavigator", {
       screen: "ChatBot",
-      params: { refresh: true },
+      params: { initialMessage: message },
     });
   };
 
