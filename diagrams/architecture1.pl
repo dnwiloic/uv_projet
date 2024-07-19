@@ -6,7 +6,7 @@ package "React Native" {
     [Services]
 }
 
-package "Authentification Locale" {
+package "Firebase" {
     [Authentification]
 }
 package "Base de Données"{

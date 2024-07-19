@@ -1,6 +1,6 @@
 import { Entypo } from "@expo/vector-icons";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,22 +13,16 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import { api_url } from "../context/Constant";
 
-const cities = [
-  { label: "City 1", value: { lat: "33.44", lon: "-94.04" }, key: "1" },
-  { label: "City 2", value: { lat: "40.71", lon: "-74.01" }, key: "2" },
-  { label: "City 3", value: { lat: "41.31", lon: "-72.92" }, key: "3" },
-  { label: "City 4", value: { lat: "42.36", lon: "-71.06" }, key: "4" },
-  { label: "City 5", value: { lat: "43.61", lon: "-116.23" }, key: "5" },
-  { label: "City 6", value: { lat: "44.98", lon: "-93.27" }, key: "6" },
-  { label: "City 7", value: { lat: "45.52", lon: "-122.67" }, key: "7" },
-];
+import cities from "../components/Cities";
+
+const defaultCity = cities.find((city) => city.label === "Dschang");
 
 const WeatherScreen = () => {
   const [weatherDetails, setWeatherDetails] = useState(null);
   const [forecastData, setForecastData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(defaultCity.value);
   const [items, setItems] = useState(cities);
 
   const handleCityChange = async (city) => {
@@ -80,6 +74,10 @@ const WeatherScreen = () => {
       }
     }
   };
+
+  useEffect(() => {
+    handleCityChange(defaultCity);
+  }, []);
 
   return (
     <ImageBackground
@@ -254,10 +252,7 @@ const styles = StyleSheet.create({
     padding: 10,
     zIndex: 1,
     backgroundColor: "rgba(255, 255, 255, 0.8)",
-    //marginBottom: Dimensions.get("window").height * 0.5,
-    //marginBottom: 20,
   },
-
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -265,7 +260,6 @@ const styles = StyleSheet.create({
     padding: 20,
     fontSize: 16,
     backgroundColor: "rgba(0, 0, 0, 0.1)",
-    //backgroundColor: "white",
   },
   placeholderStyle: {
     color: "#999",

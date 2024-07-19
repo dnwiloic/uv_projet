@@ -4,7 +4,7 @@ node "Appareil Utilisateur" {
 }
 
 node "Cloud de Rendu" {
-    node "Authentification Locale" {
+    node "Firebase" {
         [Authentification]
     }
     node "Base de Données" {
