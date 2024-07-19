@@ -9,7 +9,6 @@ from config import openweatherapi, weatherapi
 from flask import Flask, current_app, jsonify, request
 from flask_cors import CORS
 from flask_ngrok import run_with_ngrok
-from plant import plant
 from requests import get as requests_get
 from requests import post as requests_post
 from werkzeug.utils import secure_filename
