@@ -29,6 +29,7 @@ const Chatbot = ({ userId, refresh, initialMessage }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchChatHistory = async () => {
       const chatHistory = await database.getChatHistoryByUserId(userId);
       if (chatHistory.length > 0) {
@@ -43,6 +44,7 @@ const Chatbot = ({ userId, refresh, initialMessage }) => {
           },
         ]);
       }
+      setIsLoading(false);
     };
 
     fetchChatHistory();

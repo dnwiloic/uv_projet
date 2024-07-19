@@ -56,7 +56,11 @@ const Login = () => {
       }, 1500);
       resetAndNavigate();
     } catch (error) {
-      setSnackbarMessage("Invalid email or password.");
+      if (error.message.includes("Failed")) {
+        setSnackbarMessage("Network Error");
+      } else {
+        setSnackbarMessage("Invalid Email or Password");
+      }
       setVisible(true);
     } finally {
       setIsLoading(false);

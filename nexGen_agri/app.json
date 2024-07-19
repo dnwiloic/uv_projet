@@ -12,13 +12,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location to show the weather information."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/background.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": ["ACCESS_FINE_LOCATION"],
       "package": "com.lidelle.nexgen_agri"
     },
     "web": {
