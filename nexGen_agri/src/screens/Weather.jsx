@@ -1,5 +1,6 @@
 import { Entypo } from "@expo/vector-icons";
 import axios from "axios";
+import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -10,36 +11,42 @@ import {
   Text,
   View,
 } from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { api_url } from "../context/Constant";
-
-import cities from "../components/Cities";
-
-const defaultCity = cities.find((city) => city.label === "Dschang");
 
 const WeatherScreen = () => {
   const [weatherDetails, setWeatherDetails] = useState(null);
   const [forecastData, setForecastData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(defaultCity.value);
-  const [items, setItems] = useState(cities);
+  const [location, setLocation] = useState({
+    latitude: 5.4527273,
+    longitude: 10.0618887,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421,
+  });
 
-  const handleCityChange = async (city) => {
-    if (city) {
+  const CAMEROON_REGION = {
+    latitude: 7.3697,
+    longitude: 12.3547,
+    latitudeDelta: 10,
+    longitudeDelta: 10,
+  };
+
+  const handleLocationChange = async (region) => {
+    if (region) {
       setIsLoading(true);
       try {
-        const weatherResponse = await axios.get(api_url + "/weather", {
+        const weatherResponse = await axios.get(`${api_url}/weather`, {
           params: {
-            lat: city.lat,
-            lon: city.lon,
+            lat: region.latitude,
+            lon: region.longitude,
           },
         });
 
-        const forecastResponse = await axios.get(api_url + "/forecast", {
+        const forecastResponse = await axios.get(`${api_url}/forecast`, {
           params: {
-            lat: city.lat,
-            lon: city.lon,
+            lat: region.latitude,
+            lon: region.longitude,
           },
         });
 
@@ -55,7 +62,7 @@ const WeatherScreen = () => {
           visibility: `${weatherData.current.vis_km} km`,
           precipitation: `${weatherData.current.precip_mm} mm`,
           feelsLike: `${weatherData.current.feelslike_c}°C`,
-          uvIndex: `${weatherData.current.uv}`,
+
           airQuality: `${weatherData.current.air_quality.pm2_5} μg/m³`,
         });
 
@@ -76,7 +83,22 @@ const WeatherScreen = () => {
   };
 
   useEffect(() => {
-    handleCityChange(defaultCity);
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setLocation({
+        ...location,
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      });
+
+      handleLocationChange(currentLocation.coords);
+    })();
   }, []);
 
   return (
@@ -84,25 +106,36 @@ const WeatherScreen = () => {
       source={require("../../assets/background.png")}
       style={styles.backgroundImage}
     >
-      <View style={styles.inputWrapper}>
-        <Text>Select City</Text>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-          onChangeValue={(value) => handleCityChange(value)}
-          placeholder="Select a city"
-          style={styles.input}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          maxHeight={300}
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        region={location}
+        onRegionChangeComplete={(region) => {
+          setLocation(region);
+          handleLocationChange(region);
+        }}
+        initialRegion={CAMEROON_REGION}
+        minZoomLevel={5}
+        maxZoomLevel={10}
+      >
+        <Marker
+          coordinate={{
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }}
+          draggable
+          onDragEnd={(e) => {
+            const coords = e.nativeEvent.coordinate;
+            setLocation({
+              ...location,
+              latitude: coords.latitude,
+              longitude: coords.longitude,
+            });
+            handleLocationChange(coords);
+          }}
         />
-      </View>
+      </MapView>
+
       <ScrollView style={styles.container}>
         {isLoading ? (
           <View style={styles.loadingContainer}>
@@ -151,9 +184,7 @@ const WeatherScreen = () => {
                 <Text
                   style={styles.infoText}
                 >{`Feels like: ${weatherDetails.feelsLike}`}</Text>
-                <Text
-                  style={styles.infoText}
-                >{`UV Index: ${weatherDetails.uvIndex}`}</Text>
+
                 <Text
                   style={styles.infoText}
                 >{`Air Quality: ${weatherDetails.airQuality}`}</Text>
@@ -187,7 +218,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    // backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: "white",
+  },
+  mapContainer: {
+    flex: 1,
+  },
+  map: {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height / 3,
   },
   currentWeatherSection: {
     padding: 10,
@@ -247,31 +286,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },
-  inputWrapper: {
-    padding: 10,
-    zIndex: 1,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 20,
-    fontSize: 16,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
-  },
-  placeholderStyle: {
-    color: "#999",
-  },
-  selectedTextStyle: {
-    color: "#000",
-  },
-  inputSearchStyle: {
-    color: "#000",
-  },
-  iconStyle: {
-    color: "#000",
   },
 });
 
